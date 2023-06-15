@@ -1,19 +1,12 @@
 package com.example.circleapp.client;
 import com.example.circleapp.Controller;
 import com.example.circleapp.Dot;
-
-
 import javafx.scene.paint.Color;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.SQLException;
-
-import static com.example.circleapp.server.Server.getSavedDots;
-import static com.example.circleapp.server.Server.saveDot;
 
 public class ServerThread extends Thread{
     public Controller controller;

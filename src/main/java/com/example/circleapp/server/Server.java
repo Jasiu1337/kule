@@ -22,7 +22,7 @@ public class Server {
         }
     }
 
-    public void listen() throws SQLException {
+    public void listen(){
         Thread listen = new Thread(() ->{
         while (true)
         {
@@ -32,7 +32,8 @@ public class Server {
                 clients.add(client);
                 System.out.println("client connected");
                 client.start();
-            } catch (IOException e) {
+                sendSavedDots(client);
+            } catch (IOException | SQLException e) {
                 throw new RuntimeException(e);
             }
         }});
@@ -43,6 +44,15 @@ public class Server {
         for(ClientThread c:clients)
         {
             c.writer.println(msg);
+        }
+    }
+    void send(String msg,ClientThread client) {
+            client.writer.println(msg);
+    }
+    void sendSavedDots(ClientThread client) throws SQLException {
+        for(Dot dot:getSavedDots())
+        {
+            send(Dot.toMessage(dot.x(),dot.y(),dot.radius(),dot.color()),client);
         }
     }
 
@@ -67,7 +77,7 @@ public class Server {
         } {
     }
     }
-    public static List<Dot> getSavedDots() throws SQLException {
+    public List<Dot> getSavedDots() throws SQLException {
         List<Dot>dots=new ArrayList<>();
         PreparedStatement query=connection.prepareStatement("SELECT x,y,radius,color from dot;");
         query.execute();
